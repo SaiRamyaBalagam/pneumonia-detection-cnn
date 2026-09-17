@@ -1,0 +1,36 @@
+# Ablation variant: same as binary_pneumonia.yaml (frozen backbone, no
+# fine-tuning), but masks a 12%-of-image-size square out of all 4 corners
+# of every image before it reaches the model -- removing the printed
+# laterality marker (e.g. the "R" marker Grad-CAM found the baseline model
+# attending to) from consideration entirely.
+#
+# CONFIRMED at 3 seeds (see README's "Ablation study" section): 84.9% +/-
+# 2.2%, roughly 1.5-2 points below the baseline's pooled ~86.6% mean. A
+# single-seed check initially suggested no effect (86.9%, matching
+# baseline) -- that turned out to be wrong. The likely explanation isn't
+# that the model specifically needs the marker text, but that the 12%
+# corner mask also clips some genuine anatomy near the image edges, so
+# removing it costs a modest amount of real signal along with the marker.
+
+class_names: ["NORMAL", "PNEUMONIA"]
+data_root: "/content/chest_xray"
+
+img_size: 224
+backbone: "vgg16"
+dense_units: 64
+dropout: 0.5
+
+batch_size: 32
+epochs: 15
+init_lr: 0.001
+val_fraction: 0.10
+seeds: [42, 43, 44]
+use_class_weights: true
+early_stopping_patience: 4
+
+fine_tune: false
+
+mask_corners: true
+mask_corner_frac: 0.12
+
+results_dir: "results_masked"

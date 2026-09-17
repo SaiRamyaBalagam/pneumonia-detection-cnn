@@ -1,0 +1,36 @@
+# Ablation variant: both fine-tuning AND corner-masking together -- the
+# "best of both" combination, completing the 2x2 grid against the baseline
+# (frozen/unmasked), binary_pneumonia_finetune.yaml (fine-tuned/unmasked),
+# and binary_pneumonia_masked.yaml (frozen/masked).
+#
+# CONFIRMED at 3 seeds (see README's "Ablation study" section): 85.5% +/-
+# 5.6% -- by far the least stable variant of the four (one seed as low as
+# 79.2%, a 10.6-point spread across 3 seeds). Inherits fine-tuning's
+# instability and stacks the masked variant's modest accuracy cost on top.
+# Not recommended.
+
+class_names: ["NORMAL", "PNEUMONIA"]
+data_root: "/content/chest_xray"
+
+img_size: 224
+backbone: "vgg16"
+dense_units: 64
+dropout: 0.5
+
+batch_size: 32
+epochs: 15
+init_lr: 0.001
+val_fraction: 0.10
+seeds: [42, 43, 44]
+use_class_weights: true
+early_stopping_patience: 4
+
+fine_tune: true
+fine_tune_layers: 4
+fine_tune_epochs: 6
+fine_tune_lr: 0.00001
+
+mask_corners: true
+mask_corner_frac: 0.12
+
+results_dir: "results_finetune_masked"

@@ -1,0 +1,36 @@
+# Ablation variant: same as binary_pneumonia.yaml, but phase-2 fine-tunes
+# the top 4 VGG16 layers (~ the last conv block) for 6 more epochs at a low
+# LR, instead of leaving the whole backbone frozen. Tests whether the
+# frozen-backbone baseline (86.9% +/- 0.8%, see README) was leaving
+# accuracy on the table.
+#
+# CONFIRMED at 3 seeds (see README's "Ablation study" section): 86.4% +/-
+# 3.0% -- essentially the same mean as baseline but ~4x the variance. A
+# single-seed check initially suggested a clear win (89.1%); the full
+# 3-seed run showed that was an outlier, not a real effect. Fine-tuning
+# does not reliably improve on the frozen baseline for this dataset/setup.
+
+class_names: ["NORMAL", "PNEUMONIA"]
+data_root: "/content/chest_xray"
+
+img_size: 224
+backbone: "vgg16"
+dense_units: 64
+dropout: 0.5
+
+batch_size: 32
+epochs: 15
+init_lr: 0.001
+val_fraction: 0.10
+seeds: [42, 43, 44]
+use_class_weights: true
+early_stopping_patience: 4
+
+fine_tune: true
+fine_tune_layers: 4
+fine_tune_epochs: 6
+fine_tune_lr: 0.00001
+
+mask_corners: false
+
+results_dir: "results_finetune"

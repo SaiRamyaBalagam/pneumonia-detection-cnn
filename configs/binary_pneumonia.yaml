@@ -1,0 +1,23 @@
+# Binary Normal vs Pneumonia -- what the original report actually claimed to do.
+# Point data_root at the extracted Kaggle "chest_xray" folder
+# (kaggle datasets download -d paultimothymooney/chest-xray-pneumonia),
+# which must contain train/, val/, test/ subfolders each holding
+# NORMAL/ and PNEUMONIA/ image subfolders.
+
+class_names: ["NORMAL", "PNEUMONIA"]
+data_root: "/content/chest_xray"     # Colab path after unzipping the Kaggle dataset
+
+img_size: 224
+backbone: "vgg16"
+dense_units: 64
+dropout: 0.5
+
+batch_size: 32
+epochs: 15
+init_lr: 0.001
+val_fraction: 0.10
+seeds: [42, 43, 44]
+use_class_weights: true
+early_stopping_patience: 4
+
+results_dir: "results"

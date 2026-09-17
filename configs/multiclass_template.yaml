@@ -1,0 +1,41 @@
+# PLACEHOLDER for the future multiclass extension -- NOT run in this pass.
+#
+# Intended task: Normal / Bacterial pneumonia / Viral pneumonia / COVID-19,
+# mirroring the El Asnaoui & Chawki (2020) reference paper's setup rather
+# than the 34-image ad hoc split the original notebook used.
+#
+# To make this runnable later, data_root needs a one-time prep step (not yet
+# written) that:
+#   1. Splits the Kaggle chest_xray PNEUMONIA/ folder into BACTERIA/ and
+#      VIRUS/ subfolders using the filename convention Kermany's dataset
+#      already uses (e.g. "personNNN_bacteria_NNNN.jpeg" vs "..._virus_...").
+#   2. Merges in COVID-positive, PA-view images from the
+#      ieee8023/covid-chestxray-dataset (filtered via its metadata.csv, same
+#      filter logic the original notebook's "Build Dataset" cell already
+#      demonstrates -- reuse it, don't rewrite it).
+#   3. Rebalances/reports class counts explicitly -- COVID will be a small
+#      minority class (~200-1700 images depending on inclusion criteria vs.
+#      ~1500-2700 for bacteria/virus/normal), so use_class_weights alone may
+#      not be enough; consider oversampling or focal loss when this is built.
+#
+# Everything else (model.py, train.py, evaluate.py, gradcam.py) already
+# supports num_classes > 2 with no code changes -- only this config and the
+# data prep step above are new work.
+
+class_names: ["NORMAL", "BACTERIA", "VIRUS", "COVID"]
+data_root: "/content/chest_xray_multiclass"   # does not exist yet -- see prep steps above
+
+img_size: 224
+backbone: "vgg16"
+dense_units: 128
+dropout: 0.5
+
+batch_size: 32
+epochs: 20
+init_lr: 0.001
+val_fraction: 0.10
+seeds: [42, 43, 44]
+use_class_weights: true
+early_stopping_patience: 5
+
+results_dir: "results_multiclass"
