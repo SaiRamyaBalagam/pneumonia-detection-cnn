@@ -1,5 +1,7 @@
 # Pneumonia Chest X-Ray Classifier -- rigorous rebuild
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SaiRamyaBalagam/pneumonia-detection-cnn/blob/main/notebooks/colab_train_binary.ipynb)
+
 A rebuild of a UNT course project that fixes a gap between what the
 project's report claimed and what its code actually did, and restructures
 the code into something that can support real follow-on research (rather
